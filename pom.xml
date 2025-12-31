@@ -13,6 +13,8 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <SeleniumVersion>4.39.0</SeleniumVersion>
+        <TestNGVersion>7.11.0</TestNGVersion>
+        <GsonVersion>2.13.2</GsonVersion>
     </properties>
 
     <dependencies>
@@ -20,6 +22,19 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${SeleniumVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${TestNGVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${GsonVersion}</version>
         </dependency>
     </dependencies>
 
