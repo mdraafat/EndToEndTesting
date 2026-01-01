@@ -54,8 +54,8 @@ public class SignupPage {
         framework.clickOn("input#newsletter");
         framework.clickOn("input#optin");
 
-        framework.sendText("input#first_name", user.firstname);
-        framework.sendText("input#last_name", user.lastname);
+        framework.sendText("input#first_name", user.firstName);
+        framework.sendText("input#last_name", user.lastName);
         framework.sendText("input#company", user.company);
         framework.sendText("input#address1", user.address1);
         framework.sendText("input#address2", user.address2);

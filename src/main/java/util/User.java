@@ -1,8 +1,8 @@
 package util;
 
 public class User {
-    public String firstname;
-    public String lastname;
+    public String firstName;
+    public String lastName;
     public String name;
     public String email;
     public int day;
@@ -15,7 +15,7 @@ public class User {
     public String address2;
     public String state;
     public String city;
-    public int mobileNumber;
+    public long mobileNumber;
     public int zipcode;
     public String password;
 }
