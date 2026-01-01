@@ -1,6 +1,7 @@
 package util;
 
 import com.google.gson.Gson;
+import util.data.User;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

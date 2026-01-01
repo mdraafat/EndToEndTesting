@@ -1,4 +1,4 @@
-package util;
+package util.data;
 
 public class User {
     public String firstName;

@@ -1,15 +1,15 @@
-import framework.Framework;
+import util.framework.Framework;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import page.SignupPage;
 import util.FileHelper;
-import util.User;
+import util.data.User;
 
 @Epic("User Management")
 @Feature("User Registration")
-public class TC01RegisterUserTest {
+public class RegisterUser {
 
     private Framework framework;
     private SignupPage signupPage;

@@ -1,7 +1,7 @@
 package page;
 
-import framework.Framework;
-import util.User;
+import util.framework.Framework;
+import util.data.User;
 
 public class SignupPage {
 
