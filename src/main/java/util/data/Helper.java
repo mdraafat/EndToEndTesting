@@ -1,17 +1,16 @@
-package util;
+package util.data;
 
 import com.google.gson.Gson;
-import util.data.User;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Objects;
 
-public class FileHelper {
+public class Helper {
 
     private final FileReader filereader;
 
-    public FileHelper() throws FileNotFoundException {
+    public Helper() throws FileNotFoundException {
         filereader = new FileReader(
                 Objects.requireNonNull(this.getClass()
                         .getClassLoader()

@@ -4,19 +4,19 @@ import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import page.SignupPage;
-import util.FileHelper;
+import util.data.Helper;
 import util.data.User;
 
 @Epic("User Management")
 @Feature("User Registration")
-public class RegisterUser {
+public class RegisterUserTest {
 
     private Framework framework;
     private SignupPage signupPage;
 
     @DataProvider(name = "users")
     public User[] userDataProvider() throws Exception {
-        FileHelper fileHelper = new FileHelper();
+        Helper fileHelper = new Helper();
         return fileHelper.getUsers();
     }
 
