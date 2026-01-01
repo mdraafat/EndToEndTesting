@@ -12,9 +12,11 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <SeleniumVersion>4.39.0</SeleniumVersion>
         <TestNGVersion>7.11.0</TestNGVersion>
         <GsonVersion>2.13.2</GsonVersion>
+        <AllureVersion>2.32.0</AllureVersion>
     </properties>
 
     <dependencies>
@@ -35,6 +37,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${GsonVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${AllureVersion}</version>
         </dependency>
     </dependencies>
 

@@ -24,7 +24,7 @@ public class SignupPage {
     }
 
     public String getNewUserSignupDisplayedText() {
-        return framework.text("div.signup-form > h2");
+        return framework.getText("div.signup-form > h2");
     }
 
     public void enterEmailAndAddress(User user) {
@@ -34,7 +34,7 @@ public class SignupPage {
     }
 
     public String getAccountInformationDisplayedText() {
-        return framework.text("div.login-form > h2");
+        return framework.getText("div.login-form > h2");
     }
 
     public void fillNewAccountAndAddressInformation(User user) {
@@ -67,12 +67,12 @@ public class SignupPage {
     }
 
     public void createAccount() {
-        framework.waitForAllRequiredFieldsFilled();
+        framework.waitForAllRequiredFields(".required input, .required select");
         framework.clickOn("[data-qa='create-account']");
     }
 
     public String getAccountCreatedText() {
-        return framework.text("[data-qa='account-created']");
+        return framework.getText("[data-qa='account-created']");
     }
 
     public void clickContinue() {
@@ -80,7 +80,7 @@ public class SignupPage {
     }
 
     public Boolean checkLoggedInAsText() {
-        return framework.text(".navbar-nav > li:last-child > a").contains("Logged in as");
+        return framework.getText(".navbar-nav > li:last-child > a").contains("Logged in as");
     }
 
     public void clickDelete() {
@@ -88,6 +88,6 @@ public class SignupPage {
     }
 
     public String getAccountDeletedText() {
-        return framework.text("[data-qa='account-deleted']");
+        return framework.getText("[data-qa='account-deleted']");
     }
 }

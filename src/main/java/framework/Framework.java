@@ -53,7 +53,7 @@ public class Framework {
         return driver.findElement(By.cssSelector(cssSelector)).isDisplayed();
     }
 
-    public String text(String cssSelector) {
+    public String getText(String cssSelector) {
         isPresent(cssSelector);
         return driver.findElement(By.cssSelector(cssSelector)).getText();
     }
@@ -70,16 +70,15 @@ public class Framework {
         new Select(driver.findElement(By.cssSelector(cssSelector))).selectByContainsVisibleText(option);
     }
 
-    public void waitForAllRequiredFieldsFilled() {
+    public void waitForAllRequiredFields(String cssSelector) {
         new WebDriverWait(driver, Duration.ofSeconds(20))
             .until(_ -> {
 
                 List<WebElement> requiredFields =
-                        driver.findElements(By.cssSelector(".required input, .required select"));
+                        driver.findElements(By.cssSelector(cssSelector));
 
                 for (WebElement webElement : requiredFields) {
                     String webElementValue = webElement.getAttribute("value");
-
                     if (webElementValue == null || webElementValue.isEmpty()) {
                         return false;
                     }

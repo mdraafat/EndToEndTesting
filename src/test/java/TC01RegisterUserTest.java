@@ -1,32 +1,35 @@
 import framework.Framework;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import page.SignupPage;
 import util.FileHelper;
 import util.User;
 
+@Epic("User Management")
+@Feature("User Registration")
 public class TC01RegisterUserTest {
 
     private Framework framework;
     private SignupPage signupPage;
 
     @DataProvider(name = "users")
-    public Object[][] getUserData() throws Exception {
-        User[] users = new FileHelper().getUsers();
-        Object[][] data = new Object[users.length][1];
-
-        int index = 0;
-        for (User user : users) {
-            data[index][0] = user;
-            index++;
-        }
-
-        return data;
+    public User[] userDataProvider() throws Exception {
+        FileHelper fileHelper = new FileHelper();
+        return fileHelper.getUsers();
     }
 
     @BeforeMethod
-    public void setup() {
-        framework = Framework.startChrome();
+    @Parameters("browser")
+    public void setup(@Optional("chrome") String browser) {
+        framework = switch (browser.toLowerCase()) {
+            case "firefox" -> Framework.startFirefox();
+            case "safari" -> Framework.startSafari();
+            case "edge" -> Framework.startEdge();
+            default -> Framework.startChrome();
+        };
+
         signupPage = new SignupPage(framework);
     }
 
