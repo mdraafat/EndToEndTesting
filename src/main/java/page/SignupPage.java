@@ -38,7 +38,7 @@ public class SignupPage {
     }
 
     public void fillNewAccountAndAddressInformation(User user) {
-
+        framework.removeAd();
         if ("Male".equalsIgnoreCase(user.gender)) {
             framework.clickOn("input#id_gender1");
         } else {

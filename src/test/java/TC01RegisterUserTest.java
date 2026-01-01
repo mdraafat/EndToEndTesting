@@ -21,7 +21,7 @@ public class TC01RegisterUserTest {
     }
 
     @BeforeMethod
-    @Parameters("browser")
+    @Parameters({"browser"})
     public void setup(@Optional("chrome") String browser) {
         framework = switch (browser.toLowerCase()) {
             case "firefox" -> Framework.startFirefox();
