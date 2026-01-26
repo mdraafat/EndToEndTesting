@@ -1,22 +1,21 @@
-import util.framework.Framework;
-import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import page.SignupPage;
 import util.helper.FileHandler;
 import util.data.User;
+import util.framework.Framework;
 
 @Feature("User Registration")
-public class RegisterUserTest {
+public class RegisterMainUserTest {
 
     private Framework framework;
     private SignupPage signupPage;
 
-    @DataProvider(name = "users")
+    @DataProvider(name = "mainUser")
     public User[] userDataProvider() throws Exception {
         FileHandler fileHandler = new FileHandler();
-        return fileHandler.getUsersToBeDeleted();
+        return fileHandler.getMainUser();
     }
 
     @BeforeMethod
@@ -26,8 +25,8 @@ public class RegisterUserTest {
         signupPage = new SignupPage(framework);
     }
 
-    @Test(dataProvider = "users")
-    public void RegisterUser(User user) {
+    @Test(dataProvider = "mainUser")
+    public void RegisterMainUser(User user) {
         signupPage.navigateToHome();
         Assert.assertTrue(signupPage.isHomePageDisplayed());
 
@@ -43,9 +42,6 @@ public class RegisterUserTest {
 
         signupPage.clickContinue();
         Assert.assertTrue(signupPage.checkLoggedInAsText());
-
-        signupPage.clickDelete();
-        Assert.assertEquals(signupPage.getAccountDeletedText(), "ACCOUNT DELETED!");
     }
 
     @AfterMethod

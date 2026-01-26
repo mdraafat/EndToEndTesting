@@ -1,0 +1,21 @@
+[
+    {
+        "address1": "123 King Street",
+        "address2": "Suite 12",
+        "city": "Toronto",
+        "company": "Design Studios",
+        "country": "Canada",
+        "day": 22,
+        "email": "danieldeqla@email.com",
+        "firstName": "Daniella",
+        "gender": "Female",
+        "lastName": "Johnson",
+        "mobileNumber": 4161234567,
+        "month": "July",
+        "name": "Daniella Johnson",
+        "password": "seedqcure4546",
+        "state": "Ontario",
+        "year": 1985,
+        "zipcode": 12345
+    }
+]

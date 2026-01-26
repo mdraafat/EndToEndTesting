@@ -4,6 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,28 +19,37 @@ public class Framework {
 
     private final WebDriver driver;
 
-    private Framework(WebDriverFactory driverType) {
-        this.driver = driverType.create();
+    private Framework(WebDriver driver) {
+        this.driver = driver;
     }
 
-    private static Framework start(WebDriverFactory driverType) {
-        return new Framework(driverType);
+    public static Framework start(String browser) {
+        WebDriver driver = switch (browser.toLowerCase()) {
+            case "firefox" -> new FirefoxDriver();
+            case "safari" -> new SafariDriver();
+            case "edge" -> new EdgeDriver();
+            default -> new ChromeDriver();
+        };
+
+        driver.manage().window().maximize();
+
+        return new Framework(driver);
     }
 
     public static Framework startChrome() {
-        return start(WebDriverFactory.chrome);
+        return start("chrome");
     }
 
     public static Framework startFirefox() {
-        return start(WebDriverFactory.firefox);
+        return start("firefox");
     }
 
     public static Framework startEdge() {
-        return start(WebDriverFactory.edge);
+        return start("edge");
     }
 
     public static Framework startSafari() {
-        return start(WebDriverFactory.safari);
+        return start("safari");
     }
 
     public void goToUrl(String url) {
@@ -56,6 +69,7 @@ public class Framework {
 
     public String getText(String cssSelector) {
         isPresent(cssSelector);
+        removeAd();
         return driver.findElement(By.cssSelector(cssSelector)).getText();
     }
 

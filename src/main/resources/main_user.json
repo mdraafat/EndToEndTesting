@@ -1,0 +1,21 @@
+[
+  {
+    "address1": "77 Bloor Street",
+    "address2": "Apt 5B",
+    "city": "Toronto",
+    "company": "Health Plus",
+    "country": "Canada",
+    "day": 2,
+    "email": "emy_claqp1rk@email.com",
+    "firstName": "Emily",
+    "gender": "Female",
+    "lastName": "Clark",
+    "mobileNumber": 6475558899,
+    "month": "January",
+    "name": "Emily Clark",
+    "password": "emiwl1yp02qPwd",
+    "state": "Ontario",
+    "year": 1998,
+    "zipcode": 54321
+  }
+]
