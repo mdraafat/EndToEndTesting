@@ -8,7 +8,7 @@
     <test name="Registration Tests">
         <classes>
             <class name="RegisterUserTest"/>
-            <class name="RegisterMainUserTest"/>
+            <class name="LoginUserWithCorrectEmailAndPasswordTest"/>
         </classes>
     </test>
 

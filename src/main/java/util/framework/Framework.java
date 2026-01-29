@@ -1,13 +1,12 @@
 package util.framework;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,38 +17,23 @@ import java.util.List;
 public class Framework {
 
     private final WebDriver driver;
+    private final WebDriverWait wait;
+    private final Actions actions;
+
+    private static final Duration DEFAULT_WAIT = Duration.ofSeconds(10);
+    private static final String GOOGLE_VIGNETTE = "#google_vignette";
+    private static final String AD_SELECTOR = ".adsbygoogle.adsbygoogle-noablate";
 
     private Framework(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, DEFAULT_WAIT);
+        this.actions = new Actions(driver);
     }
 
-    public static Framework start(String browser) {
-        WebDriver driver = switch (browser.toLowerCase()) {
-            case "firefox" -> new FirefoxDriver();
-            case "safari" -> new SafariDriver();
-            case "edge" -> new EdgeDriver();
-            default -> new ChromeDriver();
-        };
-
+    public static Framework start() {
+        WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
-
         return new Framework(driver);
-    }
-
-    public static Framework startChrome() {
-        return start("chrome");
-    }
-
-    public static Framework startFirefox() {
-        return start("firefox");
-    }
-
-    public static Framework startEdge() {
-        return start("edge");
-    }
-
-    public static Framework startSafari() {
-        return start("safari");
     }
 
     public void goToUrl(String url) {
@@ -57,54 +41,78 @@ public class Framework {
     }
 
     public void closeBrowser() {
-        if (driver != null) {
-            driver.quit();
-        }
+        driver.quit();
     }
 
     public boolean isPresent(String cssSelector) {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector)));
-        return driver.findElement(By.cssSelector(cssSelector)).isDisplayed();
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector)))
+                    .isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
-    public String getText(String cssSelector) {
-        isPresent(cssSelector);
-        removeAd();
-        return driver.findElement(By.cssSelector(cssSelector)).getText();
+    public String verify(String cssSelector) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector))
+        );
+
+        return element.getText();
     }
 
     public void clickOn(String cssSelector) {
-        driver.findElement(By.cssSelector(cssSelector)).click();
+        removeAds();
+        WebElement element = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector))
+        );
+
+        actions.moveToElement(element).click().perform();
     }
 
     public void sendText(String cssSelector, String text) {
-        driver.findElement(By.cssSelector(cssSelector)).sendKeys(text);
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector))
+        );
+
+        element.clear();
+        element.sendKeys(text);
     }
 
     public void selectOption(String cssSelector, String option) {
-        new Select(driver.findElement(By.cssSelector(cssSelector))).selectByContainsVisibleText(option);
+
+        WebElement element = wait.until(
+                ExpectedConditions.presenceOfElementLocated(By.cssSelector(cssSelector))
+        );
+
+        new Select(element).selectByContainsVisibleText(option);
     }
 
     public void waitForAllRequiredFields(String cssSelector) {
-        new WebDriverWait(driver, Duration.ofSeconds(20))
-            .until(_ -> {
+        wait.until(_ -> {
+            List<WebElement> requiredFields = driver.findElements(By.cssSelector(cssSelector));
 
-                List<WebElement> requiredFields =
-                        driver.findElements(By.cssSelector(cssSelector));
-
-                for (WebElement webElement : requiredFields) {
-                    String webElementValue = webElement.getAttribute("value");
-                    if (webElementValue == null || webElementValue.isEmpty()) {
-                        return false;
-                    }
+            for (WebElement field : requiredFields) {
+                String value = field.getAttribute("value");
+                if (value == null || value.isEmpty()) {
+                    return false;
                 }
-                return true;
-            });
+            }
+            return true;
+        });
     }
 
-    public void removeAd(){
+    private void removeAds() {
         ((JavascriptExecutor) driver).executeScript(
-                "document.querySelectorAll('.adsbygoogle.adsbygoogle-noablate').forEach(el => el.remove());"
+                """
+                        var ads = document.querySelectorAll(arguments[0]);
+                        ads && ads.length && ads.forEach(el => el.outerHTML = "");
+                        """,
+                AD_SELECTOR
         );
+
+        if (driver.getCurrentUrl().endsWith("#google_vignette")) driver.navigate().back();
     }
 }

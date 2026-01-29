@@ -1,53 +1,44 @@
+import page.LoginPage;
 import util.framework.Framework;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import page.HomePage;
-import page.SignupPage;
 import util.helper.FileHandler;
 import util.data.User;
 
 @Feature("User Registration")
-public class RegisterUserTest {
+public class LoginUserWithCorrectEmailAndPasswordTest {
 
     private HomePage homePage;
-    private SignupPage signupPage;
+    private LoginPage loginPage;
     private Framework framework;
 
-    @DataProvider(name = "register_users")
+    @DataProvider(name = "login_users")
     public User[] userDataProvider() throws Exception {
         FileHandler fileHandler = new FileHandler();
-        return fileHandler.getRegisterUser();
+        return fileHandler.getLoginUser();
     }
 
     @BeforeMethod
     public void setup() {
         framework = Framework.start();
         homePage = new HomePage(framework);
-        signupPage = new SignupPage(framework);
+        loginPage = new LoginPage(framework);
     }
 
-    @Test(dataProvider = "register_users")
+    @Test(dataProvider = "login_users")
     public void RegisterUser(User user) {
         // Navigate to home
         homePage.navigateToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
-        // Go to signup
+        // Go to login
         homePage.clickSignupLoginLink();
-        Assert.assertEquals(signupPage.getNewUserSignupDisplayedText(), "New User Signup!");
+        Assert.assertEquals(loginPage.getLoginIntoAccountDisplayedText(), "Login to your account");
 
-        // Enter signup details
-        signupPage.enterNameAndEmail(user);
-        Assert.assertEquals(signupPage.getAccountInformationDisplayedText(), "ENTER ACCOUNT INFORMATION");
-
-        // Fill form and create account
-        signupPage.fillNewAccountAndAddressInformation(user);
-        signupPage.createAccount();
-        Assert.assertEquals(signupPage.getAccountCreatedText(), "ACCOUNT CREATED!");
-
-        // Continue and verify login
-        signupPage.clickContinue();
+        // Enter login details
+        loginPage.enterEmailAndPassword(user);
         Assert.assertTrue(homePage.checkLoggedInAsText());
 
         // Delete account

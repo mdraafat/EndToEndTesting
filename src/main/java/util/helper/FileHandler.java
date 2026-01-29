@@ -3,38 +3,33 @@ package util.helper;
 import com.google.gson.Gson;
 import util.data.User;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Objects;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class FileHandler {
 
-    private final FileReader deleteUsersReader;
-    private final FileReader mainUserReader;
-
-    public FileHandler() throws FileNotFoundException {
-        deleteUsersReader = new FileReader(
-                Objects.requireNonNull(this.getClass()
-                        .getClassLoader()
-                        .getResource("delete_user.json")
-                ).getFile()
-        );
-
-        mainUserReader = new FileReader(
-                Objects.requireNonNull(this.getClass()
-                        .getClassLoader()
-                        .getResource("main_user.json")
-                ).getFile()
-        );
+    public User[] getRegisterUser() throws Exception {
+        return readUsersFromFile("register_user.json");
     }
 
-    public User[] getUsersToBeDeleted() {
-        Gson gson = new Gson();
-        return gson.fromJson(deleteUsersReader, User[].class);
+    public User[] getLoginUser() throws Exception {
+        return readUsersFromFile("login_user.json");
     }
 
-    public User[] getMainUser() {
-        Gson gson = new Gson();
-        return gson.fromJson(mainUserReader, User[].class);
+    public User[] getMainUser() throws Exception {
+        return readUsersFromFile("main_user.json");
+    }
+
+    private User[] readUsersFromFile(String fileName) throws Exception {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new RuntimeException("File not found: " + fileName);
+        }
+
+        try (InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, User[].class);
+        }
     }
 }

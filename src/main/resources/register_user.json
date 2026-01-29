@@ -1,0 +1,21 @@
+[
+  {
+    "address1": "77 Bloor Street",
+    "address2": "Apt 5B",
+    "city": "Toronto",
+    "company": "Health Plus",
+    "country": "Canada",
+    "day": 2,
+    "email": "kerchak@proton.egy",
+    "firstName": "Kerchak",
+    "gender": "Male",
+    "lastName": "Clark",
+    "mobileNumber": 6475558899,
+    "month": "January",
+    "name": "kerchak Clark",
+    "password": "pwd123",
+    "state": "Ontario",
+    "year": 1998,
+    "zipcode": 54321
+  }
+]

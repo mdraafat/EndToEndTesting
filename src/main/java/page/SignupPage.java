@@ -7,87 +7,110 @@ public class SignupPage {
 
     private final Framework framework;
 
+    // Locators
+    private static final String NEW_USER_SIGNUP_HEADING = "div.signup-form > h2";
+    private static final String SIGNUP_NAME_INPUT = "[data-qa='signup-name']";
+    private static final String SIGNUP_EMAIL_INPUT = "[data-qa='signup-email']";
+    private static final String SIGNUP_BUTTON = "[data-qa='signup-button']";
+    private static final String ACCOUNT_INFO_HEADING = "div.login-form > h2";
+    private static final String GENDER_MALE_RADIO = "input#id_gender1";
+    private static final String GENDER_FEMALE_RADIO = "input#id_gender2";
+    private static final String PASSWORD_INPUT = "input#password.form-control";
+    private static final String DAY_DROPDOWN = "select#days";
+    private static final String MONTH_DROPDOWN = "select#months";
+    private static final String YEAR_DROPDOWN = "select#years";
+    private static final String NEWSLETTER_CHECKBOX = "input#newsletter";
+    private static final String SPECIAL_OFFERS_CHECKBOX = "input#optin";
+    private static final String FIRST_NAME_INPUT = "input#first_name";
+    private static final String LAST_NAME_INPUT = "input#last_name";
+    private static final String COMPANY_INPUT = "input#company";
+    private static final String ADDRESS1_INPUT = "input#address1";
+    private static final String ADDRESS2_INPUT = "input#address2";
+    private static final String COUNTRY_DROPDOWN = "select#country";
+    private static final String STATE_INPUT = "input#state";
+    private static final String CITY_INPUT = "input#city";
+    private static final String ZIPCODE_INPUT = "input#zipcode";
+    private static final String MOBILE_NUMBER_INPUT = "input#mobile_number";
+    private static final String CREATE_ACCOUNT_BUTTON = "[data-qa='create-account']";
+    private static final String REQUIRED_FIELDS = ".required input, .required select";
+    private static final String ACCOUNT_CREATED_MESSAGE = "[data-qa='account-created']";
+    private static final String CONTINUE_BUTTON = "[data-qa='continue-button']";
+    private static final String ACCOUNT_DELETED_MESSAGE = "[data-qa='account-deleted']";
+
+    private static final String LOGGED_IN_TEXT = ".nav > li:nth-child(10) > a";
+
+
     public SignupPage(Framework framework) {
         this.framework = framework;
     }
 
-    public void navigateToHome() {
-        framework.goToUrl("https://automationexercise.com/");
-    }
-
-    public boolean isHomePageDisplayed() {
-        return framework.isPresent("#slider-carousel");
-    }
-
-    public void clickSignupLoginLink() {
-        framework.clickOn(".nav > li:nth-child(4) > a");
-    }
-
     public String getNewUserSignupDisplayedText() {
-        return framework.getText("div.signup-form > h2");
+        return framework.verify(NEW_USER_SIGNUP_HEADING);
     }
 
-    public void enterEmailAndAddress(User user) {
-        framework.sendText("[data-qa='signup-name']", user.name);
-        framework.sendText("[data-qa='signup-email']", user.email);
-        framework.clickOn("[data-qa='signup-button']");
+    public void enterNameAndEmail(User user) {
+        framework.sendText(SIGNUP_NAME_INPUT, user.getName());
+        framework.sendText(SIGNUP_EMAIL_INPUT, user.getEmail());
+        framework.clickOn(SIGNUP_BUTTON);
     }
 
     public String getAccountInformationDisplayedText() {
-        return framework.getText("div.login-form > h2");
+        return framework.verify(ACCOUNT_INFO_HEADING);
     }
 
     public void fillNewAccountAndAddressInformation(User user) {
-        framework.removeAd();
-        if ("Male".equalsIgnoreCase(user.gender)) {
-            framework.clickOn("input#id_gender1");
+
+        // Gender selection
+        if ("Male".equalsIgnoreCase(user.getGender())) {
+            framework.clickOn(GENDER_MALE_RADIO);
         } else {
-            framework.clickOn("input#id_gender2");
+            framework.clickOn(GENDER_FEMALE_RADIO);
         }
 
-        framework.sendText("input#password.form-control", user.password);
+        // Account information
+        framework.sendText(PASSWORD_INPUT, user.getPassword());
+        framework.selectOption(DAY_DROPDOWN, String.valueOf(user.getDay()));
+        framework.selectOption(MONTH_DROPDOWN, user.getMonth());
+        framework.selectOption(YEAR_DROPDOWN, String.valueOf(user.getYear()));
+        framework.clickOn(NEWSLETTER_CHECKBOX);
+        framework.clickOn(SPECIAL_OFFERS_CHECKBOX);
 
-        framework.selectOption("select#days", String.valueOf(user.day));
-        framework.selectOption("select#months", user.month);
-        framework.selectOption("select#years", String.valueOf(user.year));
+        // Address information
+        framework.sendText(FIRST_NAME_INPUT, user.getFirstName());
+        framework.sendText(LAST_NAME_INPUT, user.getLastName());
+        framework.sendText(COMPANY_INPUT, user.getCompany());
+        framework.sendText(ADDRESS1_INPUT, user.getAddress1());
+        framework.sendText(ADDRESS2_INPUT, user.getAddress2());
+        framework.sendText(STATE_INPUT, user.getState());
+        framework.sendText(CITY_INPUT, user.getCity());
+        framework.sendText(ZIPCODE_INPUT, String.valueOf(user.getZipcode()));
+        framework.sendText(MOBILE_NUMBER_INPUT, String.valueOf(user.getMobileNumber()));
+        framework.selectOption(COUNTRY_DROPDOWN, user.getCountry());
 
-        framework.clickOn("input#newsletter");
-        framework.clickOn("input#optin");
 
-        framework.sendText("input#first_name", user.firstName);
-        framework.sendText("input#last_name", user.lastName);
-        framework.sendText("input#company", user.company);
-        framework.sendText("input#address1", user.address1);
-        framework.sendText("input#address2", user.address2);
-        framework.sendText("input#state", user.state);
-        framework.sendText("input#city", user.city);
-        framework.sendText("input#zipcode", String.valueOf(user.zipcode));
-        framework.sendText("input#mobile_number", String.valueOf(user.mobileNumber));
-        framework.selectOption("select#country", user.country);
     }
 
     public void createAccount() {
-        framework.waitForAllRequiredFields(".required input, .required select");
-        framework.clickOn("[data-qa='create-account']");
+
+        framework.waitForAllRequiredFields(REQUIRED_FIELDS);
+        framework.clickOn(CREATE_ACCOUNT_BUTTON);
     }
 
     public String getAccountCreatedText() {
-        return framework.getText("[data-qa='account-created']");
+        return framework.verify(ACCOUNT_CREATED_MESSAGE);
     }
 
     public void clickContinue() {
-        framework.clickOn("[data-qa='continue-button']");
-    }
-
-    public Boolean checkLoggedInAsText() {
-        return framework.getText(".navbar-nav > li:last-child > a").contains("Logged in as");
-    }
-
-    public void clickDelete() {
-        framework.clickOn(".navbar-nav > li:nth-child(5) > a");
+        framework.clickOn(CONTINUE_BUTTON);
     }
 
     public String getAccountDeletedText() {
-        return framework.getText("[data-qa='account-deleted']");
+        return framework.verify(ACCOUNT_DELETED_MESSAGE);
     }
+
+    public boolean checkLoggedInAsText() {
+        String actualText = framework.verify(LOGGED_IN_TEXT);
+        return actualText.contains("Logged in as");
+    }
+
 }

@@ -1,21 +1,21 @@
 [
   {
-    "address1": "77 Bloor Street",
-    "address2": "Apt 5B",
-    "city": "Toronto",
-    "company": "Health Plus",
-    "country": "Canada",
-    "day": 2,
-    "email": "emy_claqp1rk@email.com",
-    "firstName": "Emily",
-    "gender": "Female",
-    "lastName": "Clark",
-    "mobileNumber": 6475558899,
-    "month": "January",
-    "name": "Emily Clark",
-    "password": "emiwl1yp02qPwd",
-    "state": "Ontario",
-    "year": 1998,
-    "zipcode": 54321
+    "address1": "45 MG Road",
+    "address2": "Apt 10",
+    "city": "Bangalore",
+    "company": "Tech Solutions",
+    "country": "India",
+    "day": 10,
+    "email": "arjun.mehta@email.com",
+    "firstName": "Arjun",
+    "gender": "Male",
+    "lastName": "Mehta",
+    "mobileNumber": 9876543210,
+    "month": "March",
+    "name": "Arjun Mehta",
+    "password": "pass123",
+    "state": "Karnataka",
+    "year": 1978,
+    "zipcode": 560001
   }
 ]
