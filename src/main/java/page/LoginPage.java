@@ -15,6 +15,7 @@ public class LoginPage {
     private static final String ACCOUNT_DELETED_MESSAGE = "[data-qa='account-deleted']";
     private static final String LOGGED_IN_TEXT = ".nav > li:nth-child(10) > a";
 
+    private static final String WRONG_CREDENTIALS_MESSAGE = "div.login-form > form > p";
 
     public LoginPage(Framework framework) {
         this.framework = framework;
@@ -31,6 +32,12 @@ public class LoginPage {
         framework.clickOn(LOGIN_BUTTON);
     }
 
+    public void enterInCorrectEmailAndPassword(User user) {
+        framework.sendText(LOGIN_EMAIL_INPUT, user.getEmail() + "invalid");
+        framework.sendText(LOGIN_PASSWORD_INPUT, user.getPassword() + "wrong");
+        framework.clickOn(LOGIN_BUTTON);
+    }
+
     public String getAccountDeletedText() {
         return framework.verify(ACCOUNT_DELETED_MESSAGE);
     }
@@ -38,5 +45,9 @@ public class LoginPage {
     public boolean checkLoggedInAsText() {
         String actualText = framework.verify(LOGGED_IN_TEXT);
         return actualText.contains("Logged in as");
+    }
+
+    public String getWrongCredentialsMessage() {
+        return framework.verify(WRONG_CREDENTIALS_MESSAGE);
     }
 }
