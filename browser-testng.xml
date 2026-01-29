@@ -9,6 +9,9 @@
         <classes>
             <class name="RegisterUserTest"/>
             <class name="LoginUserWithCorrectEmailAndPasswordTest"/>
+            <class name="LoginUserWithIncorrectEmailAndPasswordTest"/>
+            <class name="LogoutUserTest"/>
+            <class name="RegisterUserWithExistingEmailTest"/>
         </classes>
     </test>
 

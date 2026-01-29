@@ -36,7 +36,7 @@ public class SignupPage {
     private static final String ACCOUNT_CREATED_MESSAGE = "[data-qa='account-created']";
     private static final String CONTINUE_BUTTON = "[data-qa='continue-button']";
     private static final String ACCOUNT_DELETED_MESSAGE = "[data-qa='account-deleted']";
-
+    private static final String EMAIL_EXISTS_MESSAGE = "div.signup-form > form > p";
     private static final String LOGGED_IN_TEXT = ".nav > li:nth-child(10) > a";
 
 
@@ -113,4 +113,7 @@ public class SignupPage {
         return actualText.contains("Logged in as");
     }
 
+    public String getAlreadyExistMessage() {
+        return framework.verify(EMAIL_EXISTS_MESSAGE);
+    }
 }

@@ -5,19 +5,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import page.HomePage;
-import page.LoginPage;
+import page.SignupPage;
 import util.data.User;
 import util.framework.Framework;
 import util.helper.FileHandler;
 
 @Feature("User Registration")
-public class LoginUserWithIncorrectEmailAndPasswordTest {
+public class RegisterUserWithExistingEmailTest {
 
     private HomePage homePage;
-    private LoginPage loginPage;
+    private SignupPage signupPage;
     private Framework framework;
 
-    @DataProvider(name = "main_users")
+    @DataProvider(name = "register_users")
     public User[] userDataProvider() throws Exception {
         FileHandler fileHandler = new FileHandler();
         return fileHandler.getMainUser();
@@ -27,22 +27,23 @@ public class LoginUserWithIncorrectEmailAndPasswordTest {
     public void setup() {
         framework = Framework.start();
         homePage = new HomePage(framework);
-        loginPage = new LoginPage(framework);
+        signupPage = new SignupPage(framework);
     }
 
-    @Test(dataProvider = "main_users")
+    @Test(dataProvider = "register_users")
     public void RegisterUser(User user) {
         // Navigate to home
         homePage.navigateToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
-        // Go to login
+        // Go to signup
         homePage.clickSignupLoginLink();
-        Assert.assertEquals(loginPage.getLoginIntoAccountDisplayedText(), "Login to your account");
+        Assert.assertEquals(signupPage.getNewUserSignupDisplayedText(), "New User Signup!");
 
-        // Enter login details
-        loginPage.enterInCorrectEmailAndPassword(user);
-        Assert.assertEquals(loginPage.getWrongCredentialsMessage(), "Your email or password is incorrect!");
+        // Enter signup details
+        signupPage.enterNameAndEmail(user);
+        Assert.assertEquals(signupPage.getAlreadyExistMessage(), "Email Address already exist!");
+
 
     }
 

@@ -14,6 +14,7 @@ public class LoginPage {
     private static final String LOGIN_BUTTON = "[data-qa='login-button']";
     private static final String ACCOUNT_DELETED_MESSAGE = "[data-qa='account-deleted']";
     private static final String LOGGED_IN_TEXT = ".nav > li:nth-child(10) > a";
+    private static final String LOGOUT_LINK = ".nav > li:nth-child(4) > a";
 
     private static final String WRONG_CREDENTIALS_MESSAGE = "div.login-form > form > p";
 
@@ -49,5 +50,11 @@ public class LoginPage {
 
     public String getWrongCredentialsMessage() {
         return framework.verify(WRONG_CREDENTIALS_MESSAGE);
+    }
+
+    public void clickLogout() { framework.clickOn(LOGOUT_LINK); }
+
+    public boolean isLoginPageDisplayed() {
+        return framework.isPresent(USER_LOGIN_HEADING);
     }
 }

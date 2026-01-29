@@ -11,7 +11,7 @@ import util.framework.Framework;
 import util.helper.FileHandler;
 
 @Feature("User Registration")
-public class LoginUserWithIncorrectEmailAndPasswordTest {
+public class LogoutUserTest {
 
     private HomePage homePage;
     private LoginPage loginPage;
@@ -41,8 +41,12 @@ public class LoginUserWithIncorrectEmailAndPasswordTest {
         Assert.assertEquals(loginPage.getLoginIntoAccountDisplayedText(), "Login to your account");
 
         // Enter login details
-        loginPage.enterInCorrectEmailAndPassword(user);
-        Assert.assertEquals(loginPage.getWrongCredentialsMessage(), "Your email or password is incorrect!");
+        loginPage.enterEmailAndPassword(user);
+        Assert.assertTrue(homePage.checkLoggedInAsText());
+
+        // Logout account
+        loginPage.clickLogout();
+        Assert.assertTrue(loginPage.isLoginPageDisplayed());
 
     }
 
