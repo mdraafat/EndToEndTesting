@@ -18,6 +18,9 @@ public class HomePage {
     private static final String EMAIL_INPUT = "input#susbscribe_email";
     private static final String BUTTON_SUBSCRIBE = "button#subscribe";
     private static final String SUBSCRIPTION_SUCCESS_ALERT = ".alert-success";
+    private static final String ARROW_BUTTON = "a#scrollUp";
+    private static final String MAIN_TEXT = "#slider-carousel  h2";
+
 
     public HomePage(Framework framework) {
         this.framework = framework;
@@ -75,5 +78,17 @@ public class HomePage {
 
     public boolean isSubscriptionSuccess() {
         return framework.isPresent(SUBSCRIPTION_SUCCESS_ALERT);
+    }
+
+    public void scrollToHeaderViaButton() {
+        framework.clickOn(ARROW_BUTTON);
+    }
+
+    public boolean isMainTextFullyDisplayed() {
+        return framework.isPresent(MAIN_TEXT) && framework.OnTop();
+    }
+
+    public void scrollToTop() {
+        framework.ScrolltoTop();
     }
 }

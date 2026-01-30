@@ -193,4 +193,12 @@ public class Framework {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
+    public void ScrolltoTop() {
+        removeAds();
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
+    }
+
+    public boolean OnTop() {
+        return (Long) ((JavascriptExecutor) driver).executeScript("return window.pageYOffset;") == 0;
+    }
 }
