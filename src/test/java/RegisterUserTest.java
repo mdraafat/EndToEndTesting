@@ -46,7 +46,7 @@ public class RegisterUserTest {
         signupPage.createAccount();
         Assert.assertEquals(signupPage.getAccountCreatedText(), "ACCOUNT CREATED!");
 
-        // Continue and verify login
+        // Continue and getTextOf login
         signupPage.clickContinue();
         Assert.assertTrue(homePage.checkLoggedInAsText());
 

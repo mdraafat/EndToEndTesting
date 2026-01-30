@@ -7,11 +7,14 @@ public class HomePage {
     private final Framework framework;
 
     // Locators
-    private static final String HOME_URL = "https://automationexercise.com/";
     private static final String SLIDER_CAROUSEL = "#slider-carousel";
     private static final String SIGNUP_LOGIN_LINK = ".nav > li:nth-child(4) > a";
     private static final String LOGGED_IN_TEXT = ".nav > li:nth-child(10) > a";
     private static final String DELETE_ACCOUNT_LINK = ".nav > li:nth-child(5) > a";
+
+    private static final String TEST_CASES_LINK = ".nav > li:nth-child(5) > a";
+
+    private static final String CONTACT_US_LINK = ".nav > li:nth-child(8) > a";
     private static final String ACCOUNT_DELETED_MESSAGE = "[data-qa='account-deleted']";
 
     public HomePage(Framework framework) {
@@ -19,7 +22,7 @@ public class HomePage {
     }
 
     public void navigateToHome() {
-        framework.goToUrl(HOME_URL);
+        framework.goToHome();
     }
 
     public boolean isHomePageDisplayed() {
@@ -31,7 +34,7 @@ public class HomePage {
     }
 
     public boolean checkLoggedInAsText() {
-        String actualText = framework.verify(LOGGED_IN_TEXT);
+        String actualText = framework.getTextOf(LOGGED_IN_TEXT);
         return actualText.contains("Logged in as");
     }
 
@@ -40,6 +43,18 @@ public class HomePage {
     }
 
     public String getAccountDeletedText() {
-        return framework.verify(ACCOUNT_DELETED_MESSAGE);
+        return framework.getTextOf(ACCOUNT_DELETED_MESSAGE);
+    }
+
+    public void clickContactUsLink() {
+        framework.clickOn(CONTACT_US_LINK);
+    }
+
+    public void clickTestCasesLink() {
+        framework.clickOn(TEST_CASES_LINK);
+    }
+
+    public boolean isTestCasesDisplayed() {
+        return framework.isCurrentEndpoint("test_cases");
     }
 }

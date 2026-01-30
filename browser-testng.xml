@@ -15,6 +15,12 @@
         </classes>
     </test>
 
-
+    <test name="Misc Tests">
+        <classes>
+            <class name="ContactUsFormTest"/>
+            <class name="TestCasesPageTest"/>
+            <class name="AllProductsAndProductDetailTest"/>
+        </classes>
+    </test>
 
 </suite>

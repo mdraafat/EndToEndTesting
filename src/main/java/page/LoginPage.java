@@ -23,33 +23,33 @@ public class LoginPage {
     }
 
     public String getLoginIntoAccountDisplayedText() {
-        return framework.verify(USER_LOGIN_HEADING);
+        return framework.getTextOf(USER_LOGIN_HEADING);
     }
 
     public void enterEmailAndPassword(User user) {
 
-        framework.sendText(LOGIN_EMAIL_INPUT, user.getEmail());
-        framework.sendText(LOGIN_PASSWORD_INPUT, user.getPassword());
+        framework.sendTo(LOGIN_EMAIL_INPUT, user.getEmail());
+        framework.sendTo(LOGIN_PASSWORD_INPUT, user.getPassword());
         framework.clickOn(LOGIN_BUTTON);
     }
 
     public void enterInCorrectEmailAndPassword(User user) {
-        framework.sendText(LOGIN_EMAIL_INPUT, user.getEmail() + "invalid");
-        framework.sendText(LOGIN_PASSWORD_INPUT, user.getPassword() + "wrong");
+        framework.sendTo(LOGIN_EMAIL_INPUT, user.getEmail() + "invalid");
+        framework.sendTo(LOGIN_PASSWORD_INPUT, user.getPassword() + "wrong");
         framework.clickOn(LOGIN_BUTTON);
     }
 
     public String getAccountDeletedText() {
-        return framework.verify(ACCOUNT_DELETED_MESSAGE);
+        return framework.getTextOf(ACCOUNT_DELETED_MESSAGE);
     }
 
     public boolean checkLoggedInAsText() {
-        String actualText = framework.verify(LOGGED_IN_TEXT);
+        String actualText = framework.getTextOf(LOGGED_IN_TEXT);
         return actualText.contains("Logged in as");
     }
 
     public String getWrongCredentialsMessage() {
-        return framework.verify(WRONG_CREDENTIALS_MESSAGE);
+        return framework.getTextOf(WRONG_CREDENTIALS_MESSAGE);
     }
 
     public void clickLogout() { framework.clickOn(LOGOUT_LINK); }

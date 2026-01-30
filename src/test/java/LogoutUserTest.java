@@ -31,7 +31,7 @@ public class LogoutUserTest {
     }
 
     @Test(dataProvider = "main_users")
-    public void RegisterUser(User user) {
+    public void LogoutUser(User user) {
         // Navigate to home
         homePage.navigateToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());

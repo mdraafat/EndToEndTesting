@@ -45,17 +45,17 @@ public class SignupPage {
     }
 
     public String getNewUserSignupDisplayedText() {
-        return framework.verify(NEW_USER_SIGNUP_HEADING);
+        return framework.getTextOf(NEW_USER_SIGNUP_HEADING);
     }
 
     public void enterNameAndEmail(User user) {
-        framework.sendText(SIGNUP_NAME_INPUT, user.getName());
-        framework.sendText(SIGNUP_EMAIL_INPUT, user.getEmail());
+        framework.sendTo(SIGNUP_NAME_INPUT, user.getName());
+        framework.sendTo(SIGNUP_EMAIL_INPUT, user.getEmail());
         framework.clickOn(SIGNUP_BUTTON);
     }
 
     public String getAccountInformationDisplayedText() {
-        return framework.verify(ACCOUNT_INFO_HEADING);
+        return framework.getTextOf(ACCOUNT_INFO_HEADING);
     }
 
     public void fillNewAccountAndAddressInformation(User user) {
@@ -68,7 +68,7 @@ public class SignupPage {
         }
 
         // Account information
-        framework.sendText(PASSWORD_INPUT, user.getPassword());
+        framework.sendTo(PASSWORD_INPUT, user.getPassword());
         framework.selectOption(DAY_DROPDOWN, String.valueOf(user.getDay()));
         framework.selectOption(MONTH_DROPDOWN, user.getMonth());
         framework.selectOption(YEAR_DROPDOWN, String.valueOf(user.getYear()));
@@ -76,15 +76,15 @@ public class SignupPage {
         framework.clickOn(SPECIAL_OFFERS_CHECKBOX);
 
         // Address information
-        framework.sendText(FIRST_NAME_INPUT, user.getFirstName());
-        framework.sendText(LAST_NAME_INPUT, user.getLastName());
-        framework.sendText(COMPANY_INPUT, user.getCompany());
-        framework.sendText(ADDRESS1_INPUT, user.getAddress1());
-        framework.sendText(ADDRESS2_INPUT, user.getAddress2());
-        framework.sendText(STATE_INPUT, user.getState());
-        framework.sendText(CITY_INPUT, user.getCity());
-        framework.sendText(ZIPCODE_INPUT, String.valueOf(user.getZipcode()));
-        framework.sendText(MOBILE_NUMBER_INPUT, String.valueOf(user.getMobileNumber()));
+        framework.sendTo(FIRST_NAME_INPUT, user.getFirstName());
+        framework.sendTo(LAST_NAME_INPUT, user.getLastName());
+        framework.sendTo(COMPANY_INPUT, user.getCompany());
+        framework.sendTo(ADDRESS1_INPUT, user.getAddress1());
+        framework.sendTo(ADDRESS2_INPUT, user.getAddress2());
+        framework.sendTo(STATE_INPUT, user.getState());
+        framework.sendTo(CITY_INPUT, user.getCity());
+        framework.sendTo(ZIPCODE_INPUT, String.valueOf(user.getZipcode()));
+        framework.sendTo(MOBILE_NUMBER_INPUT, String.valueOf(user.getMobileNumber()));
         framework.selectOption(COUNTRY_DROPDOWN, user.getCountry());
 
 
@@ -97,7 +97,7 @@ public class SignupPage {
     }
 
     public String getAccountCreatedText() {
-        return framework.verify(ACCOUNT_CREATED_MESSAGE);
+        return framework.getTextOf(ACCOUNT_CREATED_MESSAGE);
     }
 
     public void clickContinue() {
@@ -105,15 +105,15 @@ public class SignupPage {
     }
 
     public String getAccountDeletedText() {
-        return framework.verify(ACCOUNT_DELETED_MESSAGE);
+        return framework.getTextOf(ACCOUNT_DELETED_MESSAGE);
     }
 
     public boolean checkLoggedInAsText() {
-        String actualText = framework.verify(LOGGED_IN_TEXT);
+        String actualText = framework.getTextOf(LOGGED_IN_TEXT);
         return actualText.contains("Logged in as");
     }
 
     public String getAlreadyExistMessage() {
-        return framework.verify(EMAIL_EXISTS_MESSAGE);
+        return framework.getTextOf(EMAIL_EXISTS_MESSAGE);
     }
 }

@@ -21,8 +21,10 @@ public class Framework {
     private final Actions actions;
 
     private static final Duration DEFAULT_WAIT = Duration.ofSeconds(10);
-    private static final String GOOGLE_VIGNETTE = "#google_vignette";
     private static final String AD_SELECTOR = ".adsbygoogle.adsbygoogle-noablate";
+
+    private static final String HOME_URL = "https://automationexercise.com/";
+
 
     private Framework(WebDriver driver) {
         this.driver = driver;
@@ -36,8 +38,17 @@ public class Framework {
         return new Framework(driver);
     }
 
-    public void goToUrl(String url) {
-        driver.get(url);
+    public void goToHome() {
+        driver.get(HOME_URL);
+    }
+
+    public Boolean isCurrentEndpoint(String endpoint) {
+        removeAds();
+        try {
+            return wait.until(ExpectedConditions.urlToBe(HOME_URL + endpoint));
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public void closeBrowser() {
@@ -53,7 +64,7 @@ public class Framework {
         }
     }
 
-    public String verify(String cssSelector) {
+    public String getTextOf(String cssSelector) {
 
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector))
@@ -71,7 +82,7 @@ public class Framework {
         actions.moveToElement(element).click().perform();
     }
 
-    public void sendText(String cssSelector, String text) {
+    public void sendTo(String cssSelector, String text) {
 
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector))
@@ -80,6 +91,11 @@ public class Framework {
         element.clear();
         element.sendKeys(text);
     }
+
+    public void acceptPrompt(){
+        driver.switchTo().alert().accept();
+    }
+
 
     public void selectOption(String cssSelector, String option) {
 
@@ -104,7 +120,63 @@ public class Framework {
         });
     }
 
-    private void removeAds() {
+    public boolean clickOnEachAndCheck(String linkSelector, String categorySelector, String searchKeyword, String productNameOnListSelector) {
+        removeAds();
+
+        // Get all product links
+        List<WebElement> productLinks = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(linkSelector))
+        );
+
+        int totalProducts = productLinks.size();
+
+        // Loop through each product
+        for (int i = 0; i < totalProducts; i++) {
+            // Re-fetch the list to avoid stale element reference
+            productLinks = wait.until(
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(linkSelector))
+            );
+
+            // Get all product names on the listing page
+            List<WebElement> productNames = wait.until(
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(productNameOnListSelector))
+            );
+
+            // Get the product name from the listing
+            String productNameOnList = productNames.get(i).getText().toLowerCase();
+            String keyword = searchKeyword.toLowerCase();
+
+            // Check if the product name already contains the keyword
+            if (productNameOnList.contains(keyword)) {
+                // Skip clicking, product already matches by name
+                continue;
+            }
+            removeAds();
+            // Click on the current product to check category
+            actions.moveToElement(productLinks.get(i)).click().perform();
+
+            // Wait for the category to be visible and get its text
+            WebElement categoryElement = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector(categorySelector))
+            );
+
+            String categoryText = categoryElement.getText().toLowerCase();
+
+            // Check if category contains the search keyword
+            if (!categoryText.contains(keyword)) {
+                return false; // Return false if product doesn't match
+            }
+
+            // Navigate back to the product list
+            driver.navigate().back();
+            removeAds();
+
+        }
+
+        return true; // All products matched
+    }
+
+    public void removeAds() {
         ((JavascriptExecutor) driver).executeScript(
                 """
                         var ads = document.querySelectorAll(arguments[0]);
@@ -115,4 +187,5 @@ public class Framework {
 
         if (driver.getCurrentUrl().endsWith("#google_vignette")) driver.navigate().back();
     }
+
 }

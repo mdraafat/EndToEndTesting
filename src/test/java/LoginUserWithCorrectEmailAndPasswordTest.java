@@ -28,7 +28,7 @@ public class LoginUserWithCorrectEmailAndPasswordTest {
     }
 
     @Test(dataProvider = "login_users")
-    public void RegisterUser(User user) {
+    public void LoginWithValidCredentialsThenDelete(User user) {
         // Navigate to home
         homePage.navigateToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());

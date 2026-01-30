@@ -31,7 +31,7 @@ public class RegisterUserWithExistingEmailTest {
     }
 
     @Test(dataProvider = "register_users")
-    public void RegisterUser(User user) {
+    public void RegisterUserWithExisitingEmail(User user) {
         // Navigate to home
         homePage.navigateToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
