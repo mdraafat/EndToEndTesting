@@ -15,11 +15,13 @@
         </classes>
     </test>
 
-    <test name="Misc Tests">
+    <test name="Functionality Tests">
         <classes>
             <class name="ContactUsFormTest"/>
             <class name="TestCasesPageTest"/>
             <class name="AllProductsAndProductDetailTest"/>
+            <class name="SearchProductTest"/>
+            <class name="VerifySubscriptionInHomePageTest"/>
         </classes>
     </test>
 

@@ -188,4 +188,9 @@ public class Framework {
         if (driver.getCurrentUrl().endsWith("#google_vignette")) driver.navigate().back();
     }
 
+    public void scrollToBottom(){
+        removeAds();
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    }
+
 }

@@ -11,11 +11,13 @@ public class HomePage {
     private static final String SIGNUP_LOGIN_LINK = ".nav > li:nth-child(4) > a";
     private static final String LOGGED_IN_TEXT = ".nav > li:nth-child(10) > a";
     private static final String DELETE_ACCOUNT_LINK = ".nav > li:nth-child(5) > a";
-
     private static final String TEST_CASES_LINK = ".nav > li:nth-child(5) > a";
-
     private static final String CONTACT_US_LINK = ".nav > li:nth-child(8) > a";
     private static final String ACCOUNT_DELETED_MESSAGE = "[data-qa='account-deleted']";
+    private static final String SUBSCRIPTION_TEXT = "div.single-widget > h2";
+    private static final String EMAIL_INPUT = "input#susbscribe_email";
+    private static final String BUTTON_SUBSCRIBE = "button#subscribe";
+    private static final String SUBSCRIPTION_SUCCESS_ALERT = ".alert-success";
 
     public HomePage(Framework framework) {
         this.framework = framework;
@@ -56,5 +58,22 @@ public class HomePage {
 
     public boolean isTestCasesDisplayed() {
         return framework.isCurrentEndpoint("test_cases");
+    }
+
+    public void scrollToFooter() {
+        framework.scrollToBottom();
+    }
+
+    public boolean isSubscriptionDisplayed() {
+        return framework.isPresent(SUBSCRIPTION_TEXT);
+    }
+
+    public void enterEmailForSubscribe(String email) {
+        framework.sendTo(EMAIL_INPUT, email);
+        framework.clickOn(BUTTON_SUBSCRIBE);
+    }
+
+    public boolean isSubscriptionSuccess() {
+        return framework.isPresent(SUBSCRIPTION_SUCCESS_ALERT);
     }
 }

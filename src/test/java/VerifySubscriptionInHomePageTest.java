@@ -7,7 +7,7 @@ import page.HomePage;
 import util.framework.Framework;
 
 @Feature("Functionality Tests")
-public class TestCasesPageTest {
+public class VerifySubscriptionInHomePageTest {
     private HomePage homePage;
 
     private Framework framework;
@@ -19,14 +19,18 @@ public class TestCasesPageTest {
     }
 
     @Test
-    public void TestCasesPage() {
+    public void VerifySubscriptionInHomePage() {
         // Navigate to home
         homePage.navigateToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
-        // Click Test Cases link
-        homePage.clickTestCasesLink();
-        Assert.assertTrue(homePage.isTestCasesDisplayed());
+        // verify subscription text is displayed
+        homePage.scrollToFooter();
+        Assert.assertTrue(homePage.isSubscriptionDisplayed());
+
+        // enter email and verify subscription
+        homePage.enterEmailForSubscribe("raafat@gmail.com");
+        Assert.assertTrue(homePage.isSubscriptionSuccess());
     }
 
     @AfterMethod

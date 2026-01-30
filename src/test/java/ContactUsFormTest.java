@@ -1,3 +1,4 @@
+import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -6,6 +7,7 @@ import page.ContactUsPage;
 import page.HomePage;
 import util.framework.Framework;
 
+@Feature("Functionality Tests")
 public class ContactUsFormTest {
 
     private HomePage homePage;
