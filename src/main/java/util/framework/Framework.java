@@ -4,10 +4,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
@@ -89,6 +91,13 @@ public class Framework {
         wait.until(ExpectedConditions.elementToBeClickable(element));
 
         new Actions(driver).moveToElement(element).click().perform();
+    }
+
+    public String getFastDisappearingText(String cssSelector) {
+        driver.navigate().back();
+        String text = getTextOf(cssSelector);
+        driver.navigate().forward();
+        return text;
     }
 
     public void sendTo(String cssSelector, String text) {
@@ -320,6 +329,61 @@ public class Framework {
             // Wait for modal to close
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(continueShoppingSelector)));
         }
+    }
+
+    public void waitFor(int seconds){
+        new WebDriverWait(driver, Duration.ofSeconds(seconds));
+    }
+
+    public String clickOnAndGetMessage(String buttonSelector, String messageSelector) {
+        removeAds();
+        WebElement element = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector(buttonSelector))
+        );
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior: 'instant', block: 'center'});",
+                element
+        );
+
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+
+        // Block navigation temporarily
+        ((JavascriptExecutor) driver).executeScript(
+                "window.addEventListener('beforeunload', function(e) {" +
+                        "    e.preventDefault();" +
+                        "    e.returnValue = '';" +
+                        "}, {once: true});" +
+                        "arguments[0].click();",
+                element
+        );
+
+        // Wait for and read success message
+        WebElement successMsg = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(messageSelector))
+        );
+
+        String message = successMsg.getText();
+
+        // Allow navigation to proceed
+        ((JavascriptExecutor) driver).executeScript(
+                "window.onbeforeunload = null;"
+        );
+
+        return message;
+    }
+
+    public ExpectedCondition<Boolean> fileDownloaded(String fileName) {
+        return _ -> {
+            String downloads = System.getProperty("user.home") + "/Downloads";
+            File file = new File(downloads, fileName);
+            return file.exists();
+        };
+    }
+
+    public boolean waitForFileDownload(String fileName, int timeoutSeconds) {
+        WebDriverWait fileWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+        return fileWait.until(fileDownloaded(fileName));
     }
 
 }

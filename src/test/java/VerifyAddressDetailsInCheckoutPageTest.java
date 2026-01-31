@@ -36,7 +36,7 @@ public class VerifyAddressDetailsInCheckoutPageTest {
     }
 
     @Test(dataProvider = "register_users")
-    public void RegisterUser(User user) {
+    public void VerifyAddressDetailsInCheckoutPage(User user) {
         // Navigate to home
         homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());

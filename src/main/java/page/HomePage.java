@@ -33,6 +33,7 @@ public class HomePage {
     private static final String MEN_TSHIRT_TEXT = ".features_items > h2";
     private static final String RECOMMENDED_ITEMS = ".recommended_items > h2";
     private static final String RECOMMENDED_ITEM = "#recommended-item-carousel div.productinfo > a";
+    private static final String REGISTER_LINK = "div.modal-body > p:nth-child(2) > a";
 
 
 
@@ -164,5 +165,9 @@ public class HomePage {
 
     public void clickOnRecommendedProduct() {
         framework.clickOn(RECOMMENDED_ITEM);
+    }
+
+    public void clickRegisterLoginLink() {
+        framework.clickOn(REGISTER_LINK);
     }
 }
