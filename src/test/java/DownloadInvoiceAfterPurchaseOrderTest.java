@@ -71,8 +71,8 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
         checkoutPage.clickPlaceOrder();
 
         checkoutPage.enterPaymentDetails();
-        checkoutPage.clickOnPayButton();
-        Assert.assertEquals(checkoutPage.getSuccessMessage(), "Your order has been placed successfully!");
+        String message = checkoutPage.clickOnPayButtonAndGetSuccessMessage();
+        Assert.assertEquals(message, "Your order has been placed successfully!");
 
         checkoutPage.downloadInvoice();
         Assert.assertTrue(checkoutPage.isInvoiceDownloaded());

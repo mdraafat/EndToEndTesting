@@ -66,15 +66,11 @@ public class CheckoutPage {
         framework.clickOn(CONTINUE_BUTTON);
     }
 
-    public void clickOnPayButton() {
-        framework.clickOn(PAY_BUTTON);
-    }
-
-    public String getSuccessMessage() {
-        return framework.getSuccessMessage(SUCCESS_MSG);
-    }
-
     public boolean isInvoiceDownloaded(){
         return framework.waitForFileDownload("invoice.txt", 10);
+    }
+
+    public String clickOnPayButtonAndGetSuccessMessage() {
+        return framework.clickOnAndGetMessage(PAY_BUTTON, SUCCESS_MSG);
     }
 }

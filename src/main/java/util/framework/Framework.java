@@ -93,7 +93,40 @@ public class Framework {
         new Actions(driver).moveToElement(element).click().perform();
     }
 
+    public String clickOnAndGetMessage(String button, String message) {
+        removeAds();
+        WebElement element = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector(button))
+        );
 
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior: 'instant', block: 'center'});",
+                element
+        );
+
+        // Re-wait for clickability after scroll
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+
+        // Inject a beforeunload handler to delay navigation by 5 seconds
+        ((JavascriptExecutor) driver).executeScript(
+                "window.addEventListener('beforeunload', function(e) {" +
+                        "  var start = Date.now();" +
+                        "  while(Date.now() - start < 5000) {}" +
+                        "});"
+        );
+
+        // Get the message element first
+        WebElement messageElement = driver.findElement(By.cssSelector(message));
+
+        String result = ((JavascriptExecutor) driver).executeScript(
+                "return arguments[0].textContent;",  // Added 'return'
+                messageElement  // Pass the WebElement, not the String selector
+        ).toString();
+
+        new Actions(driver).moveToElement(element).click().perform();
+
+        return result.trim();  // Return the captured result instead of calling getTextOf again
+    }
 
     public void sendTo(String cssSelector, String text) {
 
@@ -338,15 +371,5 @@ public class Framework {
         WebDriverWait fileWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
         return fileWait.until(fileDownloaded(fileName));
     }
-
-    public String getSuccessMessage(String cssSelector) {
-        removeAds();
-
-        Object msg = ((JavascriptExecutor) driver)
-                .executeScript("return sessionStorage.getItem('successMessage');");
-
-        return msg == null ? "" : msg.toString();
-    }
-
 
 }

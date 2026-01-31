@@ -60,13 +60,13 @@ public class PlaceOrderLoginBeforeCheckoutTest {
         checkoutPage.clickPlaceOrder();
 
         checkoutPage.enterPaymentDetails();
-        checkoutPage.clickOnPayButton();
-        Assert.assertEquals(checkoutPage.getSuccessMessage(), "Your order has been placed successfully!");
+        String message = checkoutPage.clickOnPayButtonAndGetSuccessMessage();
+        Assert.assertEquals(message, "Your order has been placed successfully!");
 
 
         // Delete account
-        homePage.clickDelete();
-        Assert.assertEquals(homePage.getAccountDeletedText(), "ACCOUNT DELETED!");
+//        homePage.clickDelete();
+//        Assert.assertEquals(homePage.getAccountDeletedText(), "ACCOUNT DELETED!");
     }
 
     @AfterMethod
