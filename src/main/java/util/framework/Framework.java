@@ -93,12 +93,7 @@ public class Framework {
         new Actions(driver).moveToElement(element).click().perform();
     }
 
-    public String getFastDisappearingText(String cssSelector) {
-        driver.navigate().back();
-        String text = getTextOf(cssSelector);
-        driver.navigate().forward();
-        return text;
-    }
+
 
     public void sendTo(String cssSelector, String text) {
 
@@ -331,48 +326,6 @@ public class Framework {
         }
     }
 
-    public void waitFor(int seconds){
-        new WebDriverWait(driver, Duration.ofSeconds(seconds));
-    }
-
-    public String clickOnAndGetMessage(String buttonSelector, String messageSelector) {
-        removeAds();
-        WebElement element = wait.until(
-                ExpectedConditions.elementToBeClickable(By.cssSelector(buttonSelector))
-        );
-
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({behavior: 'instant', block: 'center'});",
-                element
-        );
-
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-
-        // Block navigation temporarily
-        ((JavascriptExecutor) driver).executeScript(
-                "window.addEventListener('beforeunload', function(e) {" +
-                        "    e.preventDefault();" +
-                        "    e.returnValue = '';" +
-                        "}, {once: true});" +
-                        "arguments[0].click();",
-                element
-        );
-
-        // Wait for and read success message
-        WebElement successMsg = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(messageSelector))
-        );
-
-        String message = successMsg.getText();
-
-        // Allow navigation to proceed
-        ((JavascriptExecutor) driver).executeScript(
-                "window.onbeforeunload = null;"
-        );
-
-        return message;
-    }
-
     public ExpectedCondition<Boolean> fileDownloaded(String fileName) {
         return _ -> {
             String downloads = System.getProperty("user.home") + "/Downloads";
@@ -385,5 +338,15 @@ public class Framework {
         WebDriverWait fileWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
         return fileWait.until(fileDownloaded(fileName));
     }
+
+    public String getSuccessMessage(String cssSelector) {
+        removeAds();
+
+        Object msg = ((JavascriptExecutor) driver)
+                .executeScript("return sessionStorage.getItem('successMessage');");
+
+        return msg == null ? "" : msg.toString();
+    }
+
 
 }

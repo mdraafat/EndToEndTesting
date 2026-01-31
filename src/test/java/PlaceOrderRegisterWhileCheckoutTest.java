@@ -4,13 +4,13 @@ import util.framework.Framework;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import page.HomePage;
+        import page.HomePage;
 import page.SignupPage;
 import util.helper.FileHandler;
 import util.data.User;
 
 @Feature("User Registration")
-public class DownloadInvoiceAfterPurchaseOrderTest {
+public class PlaceOrderRegisterWhileCheckoutTest {
 
     private HomePage homePage;
     private SignupPage signupPage;
@@ -35,7 +35,7 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
     }
 
     @Test(dataProvider = "register_users")
-    public void DownloadInvoiceAfterPurchaseOrder(User user) {
+    public void PlaceOrderRegisterWhileCheckout(User user) {
         // Navigate to home
         homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
@@ -74,9 +74,6 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
         checkoutPage.clickOnPayButton();
         Assert.assertEquals(checkoutPage.getSuccessMessage(), "Your order has been placed successfully!");
 
-        checkoutPage.downloadInvoice();
-        Assert.assertTrue(checkoutPage.isInvoiceDownloaded());
-        checkoutPage.clickContinue();
 
         // Delete account
         homePage.clickDelete();

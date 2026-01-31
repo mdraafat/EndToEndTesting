@@ -1,44 +1,49 @@
-import page.CartPage;
-import page.CheckoutPage;
+import page.*;
 import util.framework.Framework;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import page.HomePage;
-import page.SignupPage;
 import util.helper.FileHandler;
 import util.data.User;
 
 @Feature("User Registration")
-public class DownloadInvoiceAfterPurchaseOrderTest {
+public class PlaceOrderLoginBeforeCheckoutTest {
 
     private HomePage homePage;
-    private SignupPage signupPage;
+    private LoginPage loginPage;
 
     private CartPage cartPage;
     private CheckoutPage checkoutPage;
 
     private Framework framework;
 
-    @DataProvider(name = "register_users")
+    @DataProvider(name = "login_users")
     public User[] userDataProvider() throws Exception {
-        return new FileHandler().getRegisterUser();
+        return new FileHandler().getLoginUser();
     }
 
     @BeforeMethod
     public void setup() {
         framework = Framework.start();
         homePage = new HomePage(framework);
-        signupPage = new SignupPage(framework);
+        loginPage = new LoginPage(framework);
         cartPage = new CartPage(framework);
         checkoutPage = new CheckoutPage(framework);
     }
 
-    @Test(dataProvider = "register_users")
-    public void DownloadInvoiceAfterPurchaseOrder(User user) {
+    @Test(dataProvider = "login_users")
+    public void PlaceOrderLoginBeforeCheckout(User user) {
         // Navigate to home
         homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
+
+        // Go to login
+        homePage.clickSignupLoginLink();
+
+        // Enter login details
+        loginPage.enterEmailAndPassword(user);
+        Assert.assertTrue(homePage.checkLoggedInAsText());
+
 
         homePage.scrollToFirstProduct();
         homePage.clickOnFirstProduct();
@@ -46,22 +51,6 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
         Assert.assertTrue(cartPage.isCartPageDisplayed());
 
         cartPage.clickProceedToCheckout();
-
-
-        // Go to signup
-        homePage.clickRegisterLoginLink();
-
-        // Enter signup details
-        signupPage.enterNameAndEmail(user);
-
-        // Fill form and create account
-        signupPage.fillNewAccountAndAddressInformation(user);
-        signupPage.createAccount();
-        Assert.assertEquals(signupPage.getAccountCreatedText(), "ACCOUNT CREATED!");
-
-        // Continue and getTextOf login
-        signupPage.clickContinue();
-        Assert.assertTrue(homePage.checkLoggedInAsText());
 
         cartPage.clickCartLink();
         cartPage.clickProceedToCheckout();
@@ -74,9 +63,6 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
         checkoutPage.clickOnPayButton();
         Assert.assertEquals(checkoutPage.getSuccessMessage(), "Your order has been placed successfully!");
 
-        checkoutPage.downloadInvoice();
-        Assert.assertTrue(checkoutPage.isInvoiceDownloaded());
-        checkoutPage.clickContinue();
 
         // Delete account
         homePage.clickDelete();

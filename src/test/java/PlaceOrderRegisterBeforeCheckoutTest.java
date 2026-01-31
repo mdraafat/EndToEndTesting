@@ -10,7 +10,7 @@ import util.helper.FileHandler;
 import util.data.User;
 
 @Feature("User Registration")
-public class DownloadInvoiceAfterPurchaseOrderTest {
+public class PlaceOrderRegisterBeforeCheckoutTest {
 
     private HomePage homePage;
     private SignupPage signupPage;
@@ -35,21 +35,13 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
     }
 
     @Test(dataProvider = "register_users")
-    public void DownloadInvoiceAfterPurchaseOrder(User user) {
+    public void PlaceOrderRegisterBeforeCheckout(User user) {
         // Navigate to home
         homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
-        homePage.scrollToFirstProduct();
-        homePage.clickOnFirstProduct();
-        homePage.clickViewCart();
-        Assert.assertTrue(cartPage.isCartPageDisplayed());
-
-        cartPage.clickProceedToCheckout();
-
-
         // Go to signup
-        homePage.clickRegisterLoginLink();
+        homePage.clickSignupLoginLink();
 
         // Enter signup details
         signupPage.enterNameAndEmail(user);
@@ -63,6 +55,14 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
         signupPage.clickContinue();
         Assert.assertTrue(homePage.checkLoggedInAsText());
 
+
+        homePage.scrollToFirstProduct();
+        homePage.clickOnFirstProduct();
+        homePage.clickViewCart();
+        Assert.assertTrue(cartPage.isCartPageDisplayed());
+
+        cartPage.clickProceedToCheckout();
+
         cartPage.clickCartLink();
         cartPage.clickProceedToCheckout();
         Assert.assertTrue(checkoutPage.VerifyAddressDetailsAndReviewOrder());
@@ -74,9 +74,6 @@ public class DownloadInvoiceAfterPurchaseOrderTest {
         checkoutPage.clickOnPayButton();
         Assert.assertEquals(checkoutPage.getSuccessMessage(), "Your order has been placed successfully!");
 
-        checkoutPage.downloadInvoice();
-        Assert.assertTrue(checkoutPage.isInvoiceDownloaded());
-        checkoutPage.clickContinue();
 
         // Delete account
         homePage.clickDelete();

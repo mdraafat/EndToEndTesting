@@ -37,7 +37,7 @@ public class CheckoutPage {
         return framework.getTextOf(BILLING_ADDR_NAME).equals(user.getCity() + " " + user.getState() + " " + user.getZipcode());
     }
 
-    public boolean VerifyAddressDetailsAndReviewYourOrder(){
+    public boolean VerifyAddressDetailsAndReviewOrder(){
         return framework.isPresent(ADDRESS_DETAILS) && framework.isPresent(REVIEW_ORDER);
     }
 
@@ -71,7 +71,7 @@ public class CheckoutPage {
     }
 
     public String getSuccessMessage() {
-        return framework.getFastDisappearingText(SUCCESS_MSG);
+        return framework.getSuccessMessage(SUCCESS_MSG);
     }
 
     public boolean isInvoiceDownloaded(){
