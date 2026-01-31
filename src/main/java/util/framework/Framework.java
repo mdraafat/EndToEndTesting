@@ -1,11 +1,8 @@
 package util.framework;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -18,9 +15,8 @@ public class Framework {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
-    private final Actions actions;
 
-    private static final Duration DEFAULT_WAIT = Duration.ofSeconds(10);
+    private static final Duration DEFAULT_WAIT = Duration.ofSeconds(60);
     private static final String AD_SELECTOR = ".adsbygoogle.adsbygoogle-noablate";
 
     private static final String HOME_URL = "https://automationexercise.com/";
@@ -29,11 +25,12 @@ public class Framework {
     private Framework(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, DEFAULT_WAIT);
-        this.actions = new Actions(driver);
     }
 
     public static Framework start() {
-        WebDriver driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.setPageLoadStrategy(PageLoadStrategy.EAGER); // for faster run
+        WebDriver driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         return new Framework(driver);
     }
@@ -65,12 +62,16 @@ public class Framework {
     }
 
     public String getTextOf(String cssSelector) {
-
+        removeAds();
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector))
         );
 
         return element.getText();
+    }
+
+    public int getValueOf(String cssSelector) {
+        return Integer.parseInt(getTextOf(cssSelector).replaceAll("[^0-9]", ""));
     }
 
     public void clickOn(String cssSelector) {
@@ -79,7 +80,15 @@ public class Framework {
                 ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector))
         );
 
-        actions.moveToElement(element).click().perform();
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior: 'instant', block: 'center'});",
+                element
+        );
+
+        // Re-wait for clickability after scroll
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+
+        new Actions(driver).moveToElement(element).click().perform();
     }
 
     public void sendTo(String cssSelector, String text) {
@@ -153,7 +162,7 @@ public class Framework {
             }
             removeAds();
             // Click on the current product to check category
-            actions.moveToElement(productLinks.get(i)).click().perform();
+            new Actions(driver).moveToElement(productLinks.get(i)).click().perform();
 
             // Wait for the category to be visible and get its text
             WebElement categoryElement = wait.until(
@@ -177,15 +186,32 @@ public class Framework {
     }
 
     public void removeAds() {
-        ((JavascriptExecutor) driver).executeScript(
-                """
-                        var ads = document.querySelectorAll(arguments[0]);
-                        ads && ads.length && ads.forEach(el => el.outerHTML = "");
-                        """,
-                AD_SELECTOR
-        );
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-        if (driver.getCurrentUrl().endsWith("#google_vignette")) driver.navigate().back();
+            // Wait until at least one ad element exists
+            wait.until(driver -> {
+                Long count = (Long) ((JavascriptExecutor) driver).executeScript(
+                        "return document.querySelectorAll(arguments[0]).length;",
+                        AD_SELECTOR
+                );
+                return count > 0;
+            });
+
+            ((JavascriptExecutor) driver).executeScript(
+                    """
+                    var ads = document.querySelectorAll(arguments[0]);
+                    ads && ads.length && ads.forEach(el => el.outerHTML = "");
+                    """,
+                    AD_SELECTOR
+            );
+        } catch (TimeoutException e) {
+            // No ads present - continue
+        }
+
+        if (driver.getCurrentUrl().endsWith("#google_vignette")) {
+            driver.navigate().back();
+        }
     }
 
     public void scrollToBottom(){
@@ -193,7 +219,7 @@ public class Framework {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 
-    public void ScrolltoTop() {
+    public void scrolltoTop() {
         removeAds();
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
     }
@@ -201,4 +227,99 @@ public class Framework {
     public boolean OnTop() {
         return (Long) ((JavascriptExecutor) driver).executeScript("return window.pageYOffset;") == 0;
     }
+
+    public void hoverAndClickOverProduct(String cssSelector, String childSelector, int index) {
+        removeAds();
+        List<WebElement> products = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(cssSelector))
+        );
+
+        new Actions(driver).moveToElement(products.get(index)).perform();
+
+        WebElement childElement = products.get(index).findElement(By.cssSelector(childSelector));
+        wait.until(ExpectedConditions.elementToBeClickable(childElement));
+        childElement.click();
+    }
+
+    public void clickOnIndex(String cssSelector, int index) {
+        removeAds();
+        List<WebElement> products = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(cssSelector))
+        );
+
+        new Actions(driver).moveToElement(products.get(index)).click().perform();
+    }
+
+    public int numberOfElements(String cssSelector) {
+        try {
+            List<WebElement> elements = wait.until(
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(cssSelector))
+            );
+            return elements.size();
+        } catch (TimeoutException e) {
+            return 0;
+        }
+    }
+
+    public boolean verifyPriceTimesQuantityEqualsTotal(String priceSelector, String qtySelector, String totalSelector) {
+        int itemPrice = getValueOf(priceSelector);
+        int itemQty = getValueOf(qtySelector);
+        int totalPrice = getValueOf(totalSelector);
+        return totalPrice == itemPrice * itemQty;
+    }
+
+    public void scrollTo(String cssSelector) {
+        removeAds();
+        WebElement element = driver.findElement(By.cssSelector(cssSelector));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                element
+        );
+    }
+
+    public int countAllElementsLike(String selector) {
+        removeAds();
+
+        // Get all elements matching the selector
+        List<WebElement> elements = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(selector))
+        );
+
+        return elements.size();
+    }
+
+    public void clickAllProductsAndDismissModal(String productWrapperSelector, String addToCartSelector, String continueShoppingSelector) {
+        removeAds();
+
+        // Get all product wrapper elements
+        List<WebElement> products = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(productWrapperSelector))
+        );
+
+        // Iterate through each product
+        for (WebElement product : products) {
+            removeAds();
+
+            // Find the "Add to Cart" button within this product
+            WebElement addToCartButton = product.findElement(By.cssSelector(addToCartSelector));
+
+            // Only scroll if element is not displayed
+            if (!(addToCartButton).isDisplayed()) {
+                scrollTo(addToCartSelector);
+            }
+
+            wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+            addToCartButton.click();
+
+            // Wait for the modal and click "Continue Shopping"
+            WebElement continueButton = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.cssSelector(continueShoppingSelector))
+            );
+            continueButton.click();
+
+            // Wait for modal to close
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(continueShoppingSelector)));
+        }
+    }
+
 }

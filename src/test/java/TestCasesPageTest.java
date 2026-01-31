@@ -21,7 +21,7 @@ public class TestCasesPageTest {
     @Test
     public void TestCasesPage() {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // Click Test Cases link

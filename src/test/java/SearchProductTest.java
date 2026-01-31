@@ -25,7 +25,7 @@ public class SearchProductTest {
     @Test
     public void SearchProduct() {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // Click on Products Button

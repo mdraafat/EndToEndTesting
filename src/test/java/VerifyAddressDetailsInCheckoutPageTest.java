@@ -1,3 +1,5 @@
+import page.CartPage;
+import page.CheckoutPage;
 import util.framework.Framework;
 import io.qameta.allure.Feature;
 import org.testng.Assert;
@@ -8,10 +10,14 @@ import util.helper.FileHandler;
 import util.data.User;
 
 @Feature("User Registration")
-public class RegisterUserTest {
+public class VerifyAddressDetailsInCheckoutPageTest {
 
     private HomePage homePage;
     private SignupPage signupPage;
+
+    private CartPage cartPage;
+    private CheckoutPage checkoutPage;
+
     private Framework framework;
 
     @DataProvider(name = "register_users")
@@ -25,6 +31,8 @@ public class RegisterUserTest {
         framework = Framework.start();
         homePage = new HomePage(framework);
         signupPage = new SignupPage(framework);
+        cartPage = new CartPage(framework);
+        checkoutPage = new CheckoutPage(framework);
     }
 
     @Test(dataProvider = "register_users")
@@ -49,6 +57,16 @@ public class RegisterUserTest {
         // Continue and getTextOf login
         signupPage.clickContinue();
         Assert.assertTrue(homePage.checkLoggedInAsText());
+
+        homePage.scrollToFirstProduct();
+        homePage.clickOnFirstProduct();
+        homePage.clickViewCart();
+        Assert.assertTrue(cartPage.isCartPageDisplayed());
+
+        cartPage.clickProceedToCheckout();
+
+        Assert.assertTrue(checkoutPage.sameDeliveryAddressInfo(user));
+        Assert.assertTrue(checkoutPage.sameBillingAddressInfo(user));
 
         // Delete account
         homePage.clickDelete();

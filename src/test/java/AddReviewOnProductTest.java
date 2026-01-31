@@ -8,7 +8,7 @@ import page.ProductPage;
 import util.framework.Framework;
 
 @Feature("Functionality Tests")
-public class AllProductsAndProductDetailTest {
+public class AddReviewOnProductTest {
 
     private HomePage homePage;
 
@@ -24,7 +24,7 @@ public class AllProductsAndProductDetailTest {
     }
 
     @Test
-    public void AllProductsAndProductDetailPage() {
+    public void AddReviewOnProduct() {
         // Navigate to home
         homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
@@ -33,13 +33,12 @@ public class AllProductsAndProductDetailTest {
         productPage.clickProductsLink();
         Assert.assertTrue(productPage.isProductsPageDisplayed());
 
-        // Product List Displayed
-        Assert.assertTrue(productPage.isProductListDisplayed());
-
-        // Check details of first product
+        // Check write your review
         productPage.clickProduct();
-        Assert.assertTrue(productPage.isFirstProductDetailsDisplayed());
-        Assert.assertTrue(productPage.areFirstProductDetailsInformationDisplayed());
+        Assert.assertTrue(productPage.isWriteYourReviewDisplayed());
+
+        productPage.fillInReview();
+        Assert.assertEquals(productPage.clickSubmit(), "Thank you for your review.");
     }
 
     @AfterMethod

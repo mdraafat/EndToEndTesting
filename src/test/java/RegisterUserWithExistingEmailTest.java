@@ -33,7 +33,7 @@ public class RegisterUserWithExistingEmailTest {
     @Test(dataProvider = "register_users")
     public void RegisterUserWithExisitingEmail(User user) {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // Go to signup

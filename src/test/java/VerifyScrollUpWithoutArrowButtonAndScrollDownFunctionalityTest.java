@@ -19,9 +19,9 @@ public class VerifyScrollUpWithoutArrowButtonAndScrollDownFunctionalityTest {
     }
 
     @Test
-    public void VerifySubscriptionInHomePage() {
+    public void VerifyScrollUpWithoutArrowButtonAndScrollDown() {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // verify subscription text is displayed

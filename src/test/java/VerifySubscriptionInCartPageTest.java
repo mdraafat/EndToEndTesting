@@ -25,7 +25,7 @@ public class VerifySubscriptionInCartPageTest {
     @Test
     public void VerifySubscriptionInHomePage() {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         cartPage.clickCartLink();

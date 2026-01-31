@@ -33,7 +33,7 @@ public class LogoutUserTest {
     @Test(dataProvider = "main_users")
     public void LogoutUser(User user) {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // Go to login

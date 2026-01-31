@@ -5,7 +5,6 @@
         <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
 
-<!--    Tests 1 till 5 -->
     <test name="Registration Tests">
         <classes>
             <class name="RegisterUserTest"/>
@@ -16,7 +15,6 @@
         </classes>
     </test>
 
-<!--    Tests 6 till 11 + (25, 26) -->
     <test name="Functionality Tests">
         <classes>
             <class name="ContactUsFormTest"/>
@@ -25,14 +23,27 @@
             <class name="SearchProductTest"/>
             <class name="VerifySubscriptionInHomePageTest"/>
             <class name="VerifySubscriptionInCartPageTest"/>
+            <class name="AddReviewOnProductTest"/>
+            <class name="AddProductsInCartTest"/>
+            <class name="VerifyProductQuantityInCartTest"/>
             <class name="VerifyScrollUpUsingArrowButtonAndScrollDownFunctionalityTest"/>
             <class name="VerifyScrollUpWithoutArrowButtonAndScrollDownFunctionalityTest"/>
         </classes>
     </test>
 
-<!--    Tests 12 till 24 -->
     <test name="Cart and Checkout Tests">
-
+        <classes>
+            <class name="PlaceOrderRegisterWhileCheckoutTest"/>
+            <class name="PlaceOrderRegisterBeforeCheckoutTest"/>
+            <class name="PlaceOrderLoginBeforeCheckoutTest"/>
+            <class name="RemoveProductsFromCartTest"/>
+            <class name="ViewCategoryProductsTest"/>
+            <class name="ViewAndCartBrandProductsTest"/>
+            <class name="SearchProductsAndVerifyCartAfterLoginTest"/>
+            <class name="AddToCartFromRecommendedItemsTest"/>
+            <class name="VerifyAddressDetailsInCheckoutPageTest"/>
+            <class name="DownloadInvoiceAfterPurchaseOrderTest"/>
+        </classes>
     </test>
 
 </suite>

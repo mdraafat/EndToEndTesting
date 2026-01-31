@@ -33,7 +33,7 @@ public class LoginUserWithIncorrectEmailAndPasswordTest {
     @Test(dataProvider = "main_users")
     public void LoginWithInvalidCredentials(User user) {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // Go to login

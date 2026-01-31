@@ -3,16 +3,15 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import page.CartPage;
 import page.HomePage;
-import page.ProductPage;
 import util.framework.Framework;
 
 @Feature("Functionality Tests")
-public class AllProductsAndProductDetailTest {
-
+public class AddToCartFromRecommendedItemsTest {
     private HomePage homePage;
 
-    private ProductPage productPage;
+    private CartPage cartPage;
 
     private Framework framework;
 
@@ -20,31 +19,25 @@ public class AllProductsAndProductDetailTest {
     public void setup() {
         framework = Framework.start();
         homePage = new HomePage(framework);
-        productPage = new ProductPage(framework);
+        cartPage = new CartPage(framework);
     }
 
     @Test
-    public void AllProductsAndProductDetailPage() {
+    public void AddToCartFromRecommendedItems() {
         // Navigate to home
         homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
-        // Click on Products Button
-        productPage.clickProductsLink();
-        Assert.assertTrue(productPage.isProductsPageDisplayed());
+        homePage.ScrollToRecommended();
+        Assert.assertTrue(homePage.isRecommendedDisplayed());
 
-        // Product List Displayed
-        Assert.assertTrue(productPage.isProductListDisplayed());
-
-        // Check details of first product
-        productPage.clickProduct();
-        Assert.assertTrue(productPage.isFirstProductDetailsDisplayed());
-        Assert.assertTrue(productPage.areFirstProductDetailsInformationDisplayed());
+        homePage.clickOnRecommendedProduct();
+        homePage.clickViewCart();
+        Assert.assertEquals(cartPage.noOfItemsInCart(), 1);
     }
 
     @AfterMethod
     public void teardown() {
         framework.closeBrowser();
     }
-
 }

@@ -7,7 +7,7 @@ import page.HomePage;
 import util.framework.Framework;
 
 @Feature("Functionality Tests")
-public class VerifySubscriptionInHomePageTest {
+public class ViewCategoryProductsTest {
     private HomePage homePage;
 
     private Framework framework;
@@ -19,18 +19,20 @@ public class VerifySubscriptionInHomePageTest {
     }
 
     @Test
-    public void VerifySubscriptionInHomePage() {
+    public void ViewCategoryProducts() {
         // Navigate to home
         homePage.goToHome();
-        Assert.assertTrue(homePage.isHomePageDisplayed());
+        homePage.scrollToCategories();
+        Assert.assertTrue(homePage.isCategoriesSectionVisible());
 
-        // verify subscription text is displayed
-        homePage.scrollToFooter();
-        Assert.assertTrue(homePage.isSubscriptionDisplayed());
+        homePage.clickOnWomenCategory();
+        homePage.clickOnDressCategory();
+        Assert.assertEquals(homePage.getWomenDressCategoryText(), "WOMEN - DRESS PRODUCTS");
 
-        // enter email and verify subscription
-        homePage.enterEmailForSubscribe("raafat@gmail.com");
-        Assert.assertTrue(homePage.isSubscriptionSuccess());
+        homePage.clickOnMenCategory();
+        homePage.clickOnTshirtCategory();
+        Assert.assertEquals(homePage.getMenTshirtCategoryText(), "MEN - TSHIRTS PRODUCTS");
+
     }
 
     @AfterMethod

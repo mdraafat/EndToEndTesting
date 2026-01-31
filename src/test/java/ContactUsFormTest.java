@@ -27,7 +27,7 @@ public class ContactUsFormTest {
     @Test
     public void ContactUsForm() {
         // Navigate to home
-        homePage.navigateToHome();
+        homePage.goToHome();
         Assert.assertTrue(homePage.isHomePageDisplayed());
 
         // Verify Get in Touch message

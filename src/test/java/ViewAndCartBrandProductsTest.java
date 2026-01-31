@@ -8,10 +8,8 @@ import page.ProductPage;
 import util.framework.Framework;
 
 @Feature("Functionality Tests")
-public class AllProductsAndProductDetailTest {
-
+public class ViewAndCartBrandProductsTest {
     private HomePage homePage;
-
     private ProductPage productPage;
 
     private Framework framework;
@@ -24,27 +22,23 @@ public class AllProductsAndProductDetailTest {
     }
 
     @Test
-    public void AllProductsAndProductDetailPage() {
+    public void ViewAndCartBrandProducts() {
         // Navigate to home
         homePage.goToHome();
-        Assert.assertTrue(homePage.isHomePageDisplayed());
-
-        // Click on Products Button
         productPage.clickProductsLink();
-        Assert.assertTrue(productPage.isProductsPageDisplayed());
+        productPage.scrollToBrands();
+        Assert.assertTrue(productPage.isBrandsSectionVisible());
 
-        // Product List Displayed
-        Assert.assertTrue(productPage.isProductListDisplayed());
+        productPage.clickOnFirstBrandName();
+        Assert.assertEquals(productPage.getFirstBrandNameText(), "BRAND - POLO PRODUCTS");
 
-        // Check details of first product
-        productPage.clickProduct();
-        Assert.assertTrue(productPage.isFirstProductDetailsDisplayed());
-        Assert.assertTrue(productPage.areFirstProductDetailsInformationDisplayed());
+        productPage.clickOnSecondBrandName();
+        Assert.assertEquals(productPage.getSecondBrandNameText(), "BRAND - H&M PRODUCTS");
+
     }
 
     @AfterMethod
     public void teardown() {
         framework.closeBrowser();
     }
-
 }
